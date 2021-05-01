@@ -1,12 +1,40 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-  Button, Box, Text, Input, Fade
+  Button, Box, Text, Input, Fade, FormControl
 } from '@chakra-ui/react'
 import NoteListItem from './NoteListItem'
 import { addNote } from '../firebase/crud'
+import { projectFirestore } from '../firebase/firebaseConfig'
 
-function Sidebar() {
-  const [showAddnote, setshowAddnote] = useState(false)
+var collectionRef = projectFirestore.collection('notes');
+
+
+
+
+function Sidebar({ setterFunc }) {
+  const [showAddnote, setshowAddnote] = useState(false);
+  const [formInput, setFormInput] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [listOfNotes, setListOfNotes] = useState([]);
+  const [notesCount, setNotesCount] = useState(0);
+
+  const errormessage = "please enter some title!"
+
+
+
+  const getAllNotes = () => {
+    collectionRef.onSnapshot((snapshot) => {
+      setNotesCount(snapshot.docs.length)
+      console.log(snapshot);
+      setListOfNotes(snapshot.docs.map((doc) => ({ "id": doc.id, data: doc.data() })))
+    })
+  }
+
+ 
+  useEffect(() => {
+
+    getAllNotes();
+  }, [])
   const handleNewNote = () => {
     setshowAddnote(true);
   }
@@ -14,11 +42,21 @@ function Sidebar() {
     setshowAddnote(false);
   }
   const handleSubmit = () => {
-    console.log("inside submit");
-    setshowAddnote(false);
-    addNote()
 
+    if (formInput) {
+      console.log("inside submit");
+
+      setshowAddnote(false);
+      addNote(formInput)
+    }
+    else {
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000)
+      setShowError(true);
+    }
   }
+
   return (
     <>
       <Box m="0">
@@ -31,15 +69,20 @@ function Sidebar() {
               <Button colorScheme="green" size="xs" onClick={handleNewNote}>New Note</Button>
             </Box >
             <Box textAlign="left" pl="6" pb="2">
-              <Text as="span" fontSize="sm">6 notes</Text>
+              <Text as="span" fontSize="sm" fontWeight="light">{notesCount} notes</Text>
             </Box>
             {showAddnote && <Box p="6">
+
               <Fade in={handleNewNote}>
-                <Input border="1px" borderColor="blackAlpha.200" placeholder="Enter note Title" />
-                <Box d="flex" justifyContent="space-between" mt={3}>
-                  <Button colorScheme="green" onClick={handleSubmit}> Submit </Button>
-                  <Button colorScheme="red" onClick={handleCancle} > Cancel </Button>
-                </Box>
+                <FormControl isRequired>
+                  <Input border="1px" borderColor="blackAlpha.200" value={formInput} onChange={(e) => setFormInput(e.target.value)} placeholder="Enter note Title" />
+                  {showError && <Text as="span" mt={2} fontSize="sm" style={{ color: "red" }} >{errormessage}</Text>}
+                  <Box d="flex" justifyContent="space-between" mt={3}>
+                    <Button colorScheme="green" onClick={handleSubmit}> Submit </Button>
+                    <Button colorScheme="red" type="submit" onClick={handleCancle} > Cancel </Button>
+
+                  </Box>
+                </FormControl>
               </Fade>
             </Box>}
 
@@ -48,12 +91,14 @@ function Sidebar() {
 
 
           <Box mt={24}>
-            <NoteListItem />
-            <NoteListItem />
-            <NoteListItem />
-            <NoteListItem />
-            <NoteListItem />
-            <NoteListItem />
+            {console.log("listOfNotes", listOfNotes)}
+
+            {listOfNotes &&
+              listOfNotes.map((note) => (
+                <NoteListItem data={note} setNote={setterFunc} />
+              ))}
+
+
           </Box>
 
 

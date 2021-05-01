@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -11,16 +11,19 @@ import Editor from './components/Editor'
 
 
 function App() {
+  const [data, setdata] = useState({})
+
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
         {/* <ColorModeSwitcher justifySelf="flex-end" /> */}
         <Box d="flex" width="100vw">
           <Box>
-            <Sidebar />
+            <Sidebar setterFunc={setdata} />
           </Box>
           <Box>
-            <Editor flexgrow="1" />
+            {Object.keys(data).length > 0  && <Editor flexgrow="1" data={data} />}
+
           </Box>
         </Box>
       </Box>
