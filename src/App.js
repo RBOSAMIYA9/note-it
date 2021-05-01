@@ -4,7 +4,7 @@ import {
   Box,
   theme,
 } from '@chakra-ui/react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+// import { ColorModeSwitcher } from './ColorModeSwitcher';
 import Sidebar from './components/Sidebar'
 import Editor from './components/Editor'
 

@@ -1,9 +1,9 @@
 import { projectFirestore } from './firebaseConfig'
 
-collectionRef = projectFirestore.collection('notes');
+var collectionRef = projectFirestore.collection('notes');
 
 const addNote = () => {
-    // collectionRef.add()
+    collectionRef.add()
     console.log("add note");
 }
 
