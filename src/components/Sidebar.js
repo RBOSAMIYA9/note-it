@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Button, Box, Text, Input, Fade, FormControl
+  Button, Box, Text, Input, Fade, FormControl, useColorMode
 } from '@chakra-ui/react'
 import NoteListItem from './NoteListItem'
 import { addNote } from '../firebase/crud'
@@ -12,6 +12,10 @@ var collectionRef = projectFirestore.collection('notes');
 
 
 function Sidebar({ setterFunc }) {
+
+  // eslint-disable-next-line 
+  const { colorMode, toggleColorMode } = useColorMode();
+
   const [showAddnote, setshowAddnote] = useState(false);
   const [formInput, setFormInput] = useState("");
   const [showError, setShowError] = useState(false);
@@ -30,7 +34,7 @@ function Sidebar({ setterFunc }) {
     })
   }
 
- 
+
   useEffect(() => {
 
     getAllNotes();
@@ -60,9 +64,23 @@ function Sidebar({ setterFunc }) {
   return (
     <>
       <Box m="0">
-        <Box width="30vw" height="100vh" overflowY="scroll">
+        <Box width="30vw" height="100vh"
+          overflowY="auto"
+          css={{
+            '&::-webkit-scrollbar': {
+              width: '4px',
+            },
+            '&::-webkit-scrollbar-track': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: "lightgray",
+              borderRadius: '24px',
+            },
+          }}
+        >
 
-          <Box minHeight="20" shadow="md" bg="gray.300" position="fixed" width="30vw">
+          <Box minHeight="20" shadow="md" bg={colorMode === "light" ? "gray.300" : "gray.600"} position="fixed" width="30vw">
 
             <Box d="flex" pt="6" pl="6" pr="6" pb="0" justifyContent="space-between">
               <Text fontWeight="light">Notes</Text>

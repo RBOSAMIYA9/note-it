@@ -11,6 +11,8 @@ import { deleteById } from '../firebase/crud'
 
 function NoteListItem({ data, setNote }) {
 
+
+    
     const [isOpen, setIsOpen] = useState(false)
     const onClose = () => setIsOpen(false)
     const cancelRef = useRef();
@@ -49,20 +51,20 @@ function NoteListItem({ data, setNote }) {
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
                             Delete Note
-            </AlertDialogHeader>
+                        </AlertDialogHeader>
 
                         <AlertDialogBody>
                             Are you sure? You can't undo this  afterwards.
-            </AlertDialogBody>
+                        </AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button ref={cancelRef} onClick={onClose}>
                                 Cancel
-              </Button>
+                            </Button>
 
                             <Button colorScheme="red" onClick={() => deleteNote(data.id)} ml={3}>
                                 Delete
-              </Button>
+                            </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialogOverlay>

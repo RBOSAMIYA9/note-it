@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import {
-    // eslint-disable-next-line
-    Button, Box, Input, Editable, EditablePreview, EditableInput, useEditableControls, ButtonGroup,
-    // eslint-disable-next-line
-    IconButton, CheckIcon, CloseIcon, Flex, EditIcon,Text
+
+    Box, useColorMode,
+    Text
 } from '@chakra-ui/react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -13,6 +12,8 @@ import debounce from 'lodash.debounce';
 
 function Editor({ data }) {
 
+    // eslint-disable-next-line 
+    const { colorMode, toggleColorMode } = useColorMode();
     // eslint-disable-next-line 
     const [value, setvalue] = useState(data.data.title)
 
@@ -51,24 +52,14 @@ function Editor({ data }) {
 
     return (
         <Box height="100vh" width="70vw">
-            <Box p="2" bg="gray.100" width="70vw" d="flex" justifyContent="space-between">
+            <Box p="2" bg={colorMode === "light" ? "gray.200" : "gray.500"} width="70vw" d="flex" justifyContent="space-between">
 
                 <Box >
-                    {/* <Editable
-                        textAlign="center"
-                        defaultValue="Rasengan ⚡️"
-                        fontSize="2xl"
-                        isPreviewFocusable={false}
-                    >
-                        <EditablePreview />
-                        <EditableInput />
-                        <EditableControls />
-                    </Editable> */}
-                    {/* <Input variant="flushed" type="text" value={value} onChange={(e) => editableChanged(e)} /> */}
+
                     <Text>{data.data.title}</Text>
                 </Box>
                 <Box >
-                    <Button m={1} size="sm" colorScheme="green">Share</Button>
+                    {/* <Button m={1} size="sm" colorScheme="green">Share</Button> */}
                     <ColorModeSwitcher justifySelf="flex-end" />
                 </Box>
             </Box>
